@@ -20,6 +20,7 @@ public class ScheduleResponseDto {
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
         this.createdAt = schedule.getCreatedAt().toString();
-        this.updatedAt = schedule.getUpdateAt().toString();
+        this.updatedAt = schedule.getUpdatedAt().toString();
+
     }
 }

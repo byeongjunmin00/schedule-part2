@@ -25,7 +25,7 @@ public class Schedule {
     private String content;
 
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     // 생성자 : 새 일정 만들 때 사용한다
     public Schedule(String username, String title, String content) {
@@ -33,6 +33,15 @@ public class Schedule {
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
-        this.updateAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
+
+    // 일정 수정용 메서드: 값 새로 덮어씌움
+    public void update(String username, String title, String content) {
+        this.username = username;
+        this.title = title;
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
