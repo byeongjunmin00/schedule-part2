@@ -3,7 +3,9 @@ package com.example.schedulepart2.service;
 import com.example.schedulepart2.dto.ScheduleRequestDto;
 import com.example.schedulepart2.dto.ScheduleResponseDto;
 import com.example.schedulepart2.entity.Schedule;
+import com.example.schedulepart2.entity.User;
 import com.example.schedulepart2.repository.ScheduleRepository;
+import com.example.schedulepart2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +17,14 @@ public class ScheduleService {
 
     // Repository를 주입받아서 DB 접근에 사용
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     // 일정
     public ScheduleResponseDto createSchedule(ScheduleRequestDto dto) {
         // 1. RequestDto에서 값을 꺼내서 Entity 생성
-        Schedule schedule = new Schedule(dto.getUsername(), dto.getTitle(), dto.getContent());
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + dto.getUserId()));
+        Schedule schedule = new Schedule(user, dto.getTitle(), dto.getContent());
 
         // 2. Repository를 통해 DB에 저장
         Schedule saved = scheduleRepository.save(schedule);
@@ -54,7 +59,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다. id =" + id));
         // 2. Entity의 값 새로운 값으로 변경
-        schedule.update(dto.getUsername(), dto.getTitle(), dto.getContent());
+        schedule.update(dto.getTitle(), dto.getContent());
 
         // 3. 변경된 Entity를 다시 DB에 저장
         Schedule updated = scheduleRepository.save(schedule);
