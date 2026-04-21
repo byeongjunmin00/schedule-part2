@@ -19,7 +19,7 @@ public class UserService {
 
     // 유저 생성
     public UserResponseDto createUser(UserRequestDto dto) {
-        if (dto.getPassword().length() <8) {
+        if (dto.getPassword().length() < 8) {
             throw new IllegalArgumentException("비밀번호는 8글자 이상이어야 합니다.");
         }
 
@@ -72,8 +72,22 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new IllegalArgumentException("해당 유저가 없습니다. id=" + id);
         }
-
         // DB에서 삭제
         userRepository.deleteById(id);
+    }
+
+    // 로그인
+    public User login(String email, String password) {
+        // 1. 이메일로 유저 찾기 (없으면 에러)
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("해당 이메일의 유저가 없습니다."));
+
+        // 2. 비밀번호 확인 (틀리면 에러)
+        if (!user.getPassword().equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+        }
+
+        // 3. 로그인 성공 -> 유저 반환
+        return user;
     }
 }

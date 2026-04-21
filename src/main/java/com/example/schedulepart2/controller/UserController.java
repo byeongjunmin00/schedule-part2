@@ -1,9 +1,13 @@
 package com.example.schedulepart2.controller;
 
 
+import com.example.schedulepart2.dto.LoginRequestDto;
 import com.example.schedulepart2.dto.UserRequestDto;
 import com.example.schedulepart2.dto.UserResponseDto;
+import com.example.schedulepart2.entity.User;
 import com.example.schedulepart2.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +51,26 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
+    }
+
+    // 로그인 (POST /users/login)
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto dto, HttpServletRequest request) {
+        // 1. 이메일/비밀번호로 유저 확인
+        User user = userService.login(dto.getEmail(), dto.getPassword());
+
+        // 2. 세션에 유저 정보 저장 (로그인 상태 유지)
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", user.getId());
+
+        return ResponseEntity.ok("로그인 성공");
+    }
+
+    // 로그아웃 (POST /users/logout)
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        // 세션 삭제 (로그아웃 처리)
+        request.getSession().invalidate();
+        return ResponseEntity.ok("로그아웃 성공");
     }
 }
