@@ -22,6 +22,7 @@ public class User {
 
     private String username;
     private String email;
+    private String password;
 
     @CreatedDate // 생성 시 자동으로 시간 기록
     private LocalDateTime createdAt;
@@ -30,16 +31,18 @@ public class User {
     private LocalDateTime updatedAt;
 
     // 생성자 : 새 유저 만들 때 사용
-    public User(String username, String email) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
+        this.password = password;
         // createdAt, updatedAt는 JPA Auditing가 자동으로 넣어준다
     }
 
     // 유저 수정용 메서드
-    public void update(String username, String email) {
+    public void update(String username, String email, String password) {
         this.username = username;
         this.email = email;
+        this.password = password;
         // updatedAt는 JPA Auditing가 자동으로 갱신 해준다
     }
 }

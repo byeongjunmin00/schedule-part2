@@ -19,9 +19,12 @@ public class UserService {
 
     // 유저 생성
     public UserResponseDto createUser(UserRequestDto dto) {
+        if (dto.getPassword().length() <8) {
+            throw new IllegalArgumentException("비밀번호는 8글자 이상이어야 합니다.");
+        }
 
         // 1. RequestDto에서 값 꺼내서 Entity 생성
-        User user = new User(dto.getUsername(), dto.getEmail());
+        User user = new User(dto.getUsername(), dto.getEmail(), dto.getPassword());
 
         // 2. DB에 저장
         User saved = userRepository.save(user);
@@ -56,7 +59,7 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + id));
 
         // 2. 값 변경
-        user.update(dto.getUsername(), dto.getEmail());
+        user.update(dto.getUsername(), dto.getEmail(), dto.getPassword());
 
         // 3. DB에 저장 후 ResponseDto 반환
         User updated = userRepository.save(user);
