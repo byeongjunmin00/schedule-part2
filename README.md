@@ -101,3 +101,9 @@
 - response: "로그아웃 성공"
 
 ---
+
+
+## ERD
+
+<img width="711" height="214" alt="스크린샷 2026-04-23 10 57 16" src="https://github.com/user-attachments/assets/911fa96e-4f3e-4eb1-bea1-eb522292de34" />
+
